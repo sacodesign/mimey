@@ -46,6 +46,16 @@ However, there are many MIME types have multiple extensions:
 $mimes->getAllExtensions('image/jpeg'); // array('jpeg', 'jpg', 'jpe')
 ```
 
+### Filter By Mime Type Prefix
+
+If you want to know all the extensions associated with a mime type prefix, (image/*) use this function:
+
+
+```php
+// Get all extensions for a MIME type prefix:
+$mimes->getAllExtensions('image/*'); // array('jpeg', 'jpg', 'jpe', ... )
+```
+
 ### Custom Conversions
 
 You can add custom conversions by changing the mapping that is given to `MimeTypes`.
@@ -99,7 +109,7 @@ $mimes = new \Mimey\MimeTypes($builder->getMapping());
 
 ## Install
 
-Compatible with PHP >= 5.3.
+Compatible with PHP >= 5.6.
 
 ```
 composer require ralouphie/mimey

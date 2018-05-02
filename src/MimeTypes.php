@@ -76,6 +76,21 @@ class MimeTypes implements MimeTypesInterface
 	public function getAllMimeTypes($extension)
 	{
 		$extension = $this->cleanInput($extension);
+		
+		if (strpos($extension, '/*') !== false) {
+		    // wildcard matching
+		    $mime_type = trim($extension, '*');
+		    
+		    // filter array by wildcard
+		    $filtered = array_filter($this->mapping['extensions'], function ($key) use ($mime_type) {
+		        return strpos($key, $mime_type) === 0;
+		    }, ARRAY_FILTER_USE_KEY);
+		    
+		    // now consolidate into single-level array of mime types		    
+		    return array_keys($filtered);
+		}
+		
+		
 		if (isset($this->mapping['mimes'][$extension])) {
 			return $this->mapping['mimes'][$extension];
 		}
@@ -88,6 +103,31 @@ class MimeTypes implements MimeTypesInterface
 	public function getAllExtensions($mime_type)
 	{
 		$mime_type = $this->cleanInput($mime_type);
+		
+		if (strpos($extension, '/*') !== false) {
+		    // wildcard matching
+		    $mime_type = trim($extension, '*');
+		    
+		    // filter array by wildcard
+		    $filtered = array_filter($this->mapping['extensions'], function ($key) use ($mime_type) {
+		        return strpos($key, $mime_type) === 0;
+		    }, ARRAY_FILTER_USE_KEY);
+		        
+	        // now consolidate into single-level array of extensions
+	        if($filtered) {
+	            $tmp = [];
+	            foreach($filtered as $mtypes) {
+	                foreach($mtypes as $mtype) {
+	                    $tmp[] = $mtype;
+	                }
+	            }
+	            
+	            $filtered = $tmp;
+	        }
+	        
+	        return $filtered;
+		}
+		
 		if (isset($this->mapping['extensions'][$mime_type])) {
 			return $this->mapping['extensions'][$mime_type];
 		}
